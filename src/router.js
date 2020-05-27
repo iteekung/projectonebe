@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from './store.js'
 import Login from './components/Login.vue'
 import Room from './components/Room';
+import Student from './components/Student';
 
 
 Vue.use(Router)
@@ -19,6 +20,11 @@ let router = new Router({
         path: '/room',
         name: 'room',
         component: Room
+      },
+      {
+        path: '/student',
+        name: 'student',
+        component: Student
       }
     ]
   })
@@ -39,7 +45,7 @@ let router = new Router({
     const publicPages = ['/login'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = store.state.token;
-    console.log(loggedIn)
+    // console.log("login:" + loggedIn)
 
     if (authRequired && !loggedIn) {
         return next('/login');

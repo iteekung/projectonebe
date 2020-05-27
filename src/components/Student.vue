@@ -1,13 +1,13 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="rooms"
+    :items="datas"
     sort-by="room"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Room</v-toolbar-title>
+        <v-toolbar-title>Student</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -28,30 +28,16 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.room" label="ห้อง"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="ชื่อ"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.building" label="อาคาร"></v-text-field>
+                    <v-text-field v-model="editedItem.studentId" label="รหัส"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.capacity" label="ความจุ" type="number"></v-text-field>
+                    <v-text-field v-model="editedItem.email" label="อีเมลล์"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.type" label="ประเภท"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                        :items="statusItem"
-                        v-model="editedItem.status"
-                        label="Status"
-                      ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                        :items="activeItem"
-                        v-model="editedItem.active"
-                        label="active"
-                      ></v-select>
+                    <v-text-field v-model="editedItem.phone" label="เบอร์โทร"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -66,12 +52,6 @@
         </v-dialog>
         
       </v-toolbar>
-    </template>
-    <template v-slot:item.status="{ item }">
-      {{ statusValue(item.status) }}
-    </template>
-    <template v-slot:item.active="{ item }">
-      {{ activeValue(item.active) }}
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
@@ -95,37 +75,32 @@
 </template>
 
 <script>
-import room from "./../mockup/room.json"
+import datas from "./../mockup/student.json"
 
 export default {
     data: () => ({
       dialog: false,
       headers: [
         {
-          text: 'ห้อง',
+          text: 'ชื่อ',
           align: 'start',
           sortable: false,
-          value: 'room',
+          value: 'name',
         },
-        { text: 'อาคาร', value: 'building' },
-        { text: 'ความจุ', value: 'capacity' },
-        { text: 'ประเภท', value: 'type' },
-        { text: 'status', value: 'status' },
-        { text: 'active', value: 'active' },
+        { text: 'รหัส', value: 'studentId' },
+        { text: 'อีเมลล์', value: 'email' },
+        { text: 'เบอร์โทร', value: 'phone' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      statusItem: ['Available', 'Unavailable'],
-      activeItem: ['Inactive', 'Active'],
-      rooms: [],
+      datas: [],
       editedIndex: -1,
       editedItem: {
       },
       defaultItem: {
-        room: '',
-        building: 0,
-        type: 0,
-        status: 0,
-        active: 0,
+        name: '',
+        studentId: '',
+        email: '',
+        phone: ''
       },
     }),
 
@@ -148,26 +123,18 @@ export default {
     methods: {
       initialize () {
         this.editedItem = this.defaultItem,
-        this.rooms = room
-      },
-
-      statusValue (status) {
-        return (status === 1 ? 'Available' : 'Unavailable')
-      },
-
-      activeValue (status) {
-        return (status === 1 ? 'Active' : 'Inactive')
+        this.datas = datas
       },
 
       editItem (item) {
-        this.editedIndex = this.rooms.indexOf(item)
+        this.editedIndex = this.datas.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        const index = this.rooms.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.rooms.splice(index, 1)
+        const index = this.datas.indexOf(item)
+        confirm('Are you sure you want to delete this item?') && this.datas.splice(index, 1)
       },
 
       close () {
@@ -180,9 +147,9 @@ export default {
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.rooms[this.editedIndex], this.editedItem)
+          Object.assign(this.datas[this.editedIndex], this.editedItem)
         } else {
-          this.rooms.push(this.editedItem)
+          this.datas.push(this.editedItem)
         }
         this.close()
       },
