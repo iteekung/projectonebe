@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark v-if="!isLoginPage">
-      <h3>Project B</h3>
-    </v-app-bar>
+    <Header v-if="!isLoginPage" />
 
     <v-content>
       <router-view />
@@ -11,18 +9,32 @@
 </template>
 
 <script>
+import Header from './components/layouts/Header'
+
 export default {
   name: "App",
 
-  components: {},
+  components: {
+    Header
+  },
+  
+  created () {
+    this.checkLoginPage()
+  },
 
-  mounted: function() {
-    this.isLoginPage =
-      this.$router.currentRoute.path == "/login" ? true : false;
+  watch: {
+    '$route': 'checkLoginPage'
   },
 
   data: () => ({
     isLoginPage: false
-  })
+  }),
+
+  methods: {
+    checkLoginPage() {
+      this.isLoginPage =
+      this.$router.currentRoute.path == "/login" ? true : false;
+    }
+  }
 };
 </script>

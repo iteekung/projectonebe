@@ -7,10 +7,10 @@ import router from './router'
 // Vue.pototype.$http = Axios;
 Vue.config.productionTip = false;
 
-const token = localStorage.getItem('token');
-if (token) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = token;
-}
+// const token = localStorage.getItem('token');
+// if (token) {
+//   Vue.prototype.$http.defaults.headers.common['Authorization'] = token;
+// }
 
 new Vue({
   vuetify,

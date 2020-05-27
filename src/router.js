@@ -39,6 +39,7 @@ let router = new Router({
     const publicPages = ['/login'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = store.state.token;
+    console.log(loggedIn)
 
     if (authRequired && !loggedIn) {
         return next('/login');

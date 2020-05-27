@@ -18,8 +18,7 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                
+                <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -50,16 +49,23 @@
 </template>
 
 <script>
+import store from './../store.js'
+
   export default {
-      date() {
+      data() {
           return {
               username: '',
               password: ''
           }
       },
+      mounted: 
+        function () {
+      },
       methods: {
           userSignIn() {
-              alert("login");
+            localStorage.setItem('token', 1);
+            store.state.token = 1;
+            this.$router.push('room');
           }
       }
   }
