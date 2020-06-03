@@ -21,8 +21,9 @@
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form @submit="userSignIn">
                   <v-text-field
+                    v-model="username"
                     label="Login"
                     name="login"
                     prepend-icon="person"
@@ -31,6 +32,7 @@
 
                   <v-text-field
                     id="password"
+                    v-model="password"
                     label="Password"
                     name="password"
                     prepend-icon="lock"
@@ -49,8 +51,6 @@
 </template>
 
 <script>
-import store from './../store.js'
-
   export default {
       data() {
           return {
@@ -63,10 +63,26 @@ import store from './../store.js'
       },
       methods: {
           userSignIn() {
-            localStorage.setItem('token', 1);
-            store.state.token = 1;
-            this.$router.push('room');
+              this.$http.post('http://localhost:3000/' + 'login', { username: this.username, password: this.password })
+          .then(request => this.loginSuccessful(request))
+          .catch(() => this.loginFailed())
+        },
+        loginSuccessful (req) {
+          if (!req.data.id) {
+            this.loginFailed()
+            return
           }
+          localStorage.setItem('user', req.data.id)
+          this.$store.dispatch('login')
+          this.$router.push('room');
+          // alert('login')
+          // this.$router.replace(this.$route.query.redirect || '/room')
+        },
+        loginFailed () {
+          this.$store.dispatch('logout')
+          localStorage.removeItem('user')
+          alert("username or password wrong !")
+        }
       }
   }
 </script>

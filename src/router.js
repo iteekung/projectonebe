@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store.js'
+import store from './store/auth'
 import Login from './components/Login.vue'
 import Room from './components/Room';
 import Student from './components/Student';
@@ -44,7 +44,7 @@ let router = new Router({
   router.beforeEach((to, from, next) => {
     const publicPages = ['/login'];
     const authRequired = !publicPages.includes(to.path);
-    const loggedIn = store.state.token;
+    const loggedIn = store.state.user;
     // console.log("login:" + loggedIn)
 
     if (authRequired && !loggedIn) {

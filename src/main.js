@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
-// import Axios from 'axios'
+import Axios from 'axios'
+import VueAxios from 'vue-axios'
 import router from './router'
+import store from './store/auth'
 
 // Vue.pototype.$http = Axios;
 Vue.config.productionTip = false;
@@ -11,9 +13,13 @@ Vue.config.productionTip = false;
 // if (token) {
 //   Vue.prototype.$http.defaults.headers.common['Authorization'] = token;
 // }
+Vue.prototype.$http = require('axios');
 
 new Vue({
   vuetify,
+  VueAxios, 
+  Axios,
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')
