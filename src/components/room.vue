@@ -28,13 +28,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.room" label="ห้อง"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="ห้อง"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.building" label="อาคาร"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.capacity" label="ความจุ" type="number"></v-text-field>
+                    <v-text-field v-model="editedItem.size" label="ความจุ" type="number"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.type" label="ประเภท"></v-text-field>
@@ -43,6 +43,8 @@
                     <v-select
                         :items="statusItem"
                         v-model="editedItem.status"
+                        item-value="id"
+                        item-text="name"
                         label="Status"
                       ></v-select>
                   </v-col>
@@ -50,6 +52,8 @@
                     <v-select
                         :items="activeItem"
                         v-model="editedItem.active"
+                        item-value="id"
+                        item-text="name"
                         label="active"
                       ></v-select>
                   </v-col>
@@ -95,7 +99,8 @@
 </template>
 
 <script>
-import room from "./../mockup/room.json"
+// import room from "./../mockup/room.json"
+import Axios from 'axios'
 
 export default {
     data: () => ({
@@ -105,25 +110,26 @@ export default {
           text: 'ห้อง',
           align: 'start',
           sortable: false,
-          value: 'room',
+          value: 'name',
         },
         { text: 'อาคาร', value: 'building' },
-        { text: 'ความจุ', value: 'capacity' },
+        { text: 'ความจุ', value: 'size' },
         { text: 'ประเภท', value: 'type' },
         { text: 'status', value: 'status' },
         { text: 'active', value: 'active' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      statusItem: ['Available', 'Unavailable'],
-      activeItem: ['Inactive', 'Active'],
+      statusItem: [{id: 0, name: 'Unavailable'}, {id: 1, name:'Available'}],
+      activeItem: [{id: 0, name: 'Inactive'}, {id: 1, name: 'Active'}],
       rooms: [],
       editedIndex: -1,
       editedItem: {
       },
       defaultItem: {
-        room: '',
-        building: 0,
-        type: 0,
+        name: '',
+        building: '',
+        size: 0,
+        type: '',
         status: 0,
         active: 0,
       },
@@ -147,8 +153,14 @@ export default {
 
     methods: {
       initialize () {
-        this.editedItem = this.defaultItem,
-        this.rooms = room
+        this.editedItem = this.defaultItem;
+        this.fetchRooms();
+      },
+
+      async fetchRooms() {
+        await Axios.get(this.$mainUrl + "rooms")
+          .then((res) => { this.rooms = res.data })
+          .catch(err => alert(err));
       },
 
       statusValue (status) {
@@ -165,9 +177,16 @@ export default {
         this.dialog = true
       },
 
-      deleteItem (item) {
+      async deleteItem (item) {
         const index = this.rooms.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.rooms.splice(index, 1)
+        var sure = confirm('Are you sure you want to delete this item?')
+        if (sure) {
+          await Axios.delete(this.$mainUrl + "rooms/" + this.rooms[index].id)
+            .then(() => {
+              this.rooms.splice(index, 1)
+            })
+            .catch(err => alert(err));
+        }
       },
 
       close () {
@@ -178,11 +197,19 @@ export default {
         })
       },
 
-      save () {
+      async save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.rooms[this.editedIndex], this.editedItem)
+          await Axios.put(this.$mainUrl + "rooms/" + this.rooms[this.editedIndex].id, this.editedItem)
+            .then(() => {
+              Object.assign(this.rooms[this.editedIndex], this.editedItem)
+            })
+            .catch(err => alert(err));
         } else {
-          this.rooms.push(this.editedItem)
+          await Axios.post(this.$mainUrl + "rooms", this.editedItem)
+            .then(() => {
+              this.rooms.push(this.editedItem)
+            })
+            .catch(err => alert(err));
         }
         this.close()
       },

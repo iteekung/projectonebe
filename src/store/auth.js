@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+
 import * as MutationTypes from './mutation-types'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: localStorage.getItem('user') || null
+    user: localStorage.getItem('user') || null,
   },
   mutations: {
     [MutationTypes.LOGIN] (state) {

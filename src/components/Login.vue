@@ -21,7 +21,7 @@
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <v-form @submit="userSignIn">
+                <v-form @submit="userSignIn" @keyup.native.enter="userSignIn">
                   <v-text-field
                     v-model="username"
                     label="Login"
@@ -63,7 +63,7 @@
       },
       methods: {
           userSignIn() {
-              this.$http.post('http://localhost:3000/' + 'login', { username: this.username, password: this.password })
+              this.$http.post(this.$mainUrl + 'login', { username: this.username, password: this.password })
           .then(request => this.loginSuccessful(request))
           .catch(() => this.loginFailed())
         },
