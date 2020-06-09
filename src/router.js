@@ -12,6 +12,7 @@ Vue.use(Router)
 
 let router = new Router({
     mode: 'history',
+    base: '/bebie/',
     routes: [
       {
         path: '/login',
