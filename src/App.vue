@@ -92,9 +92,21 @@ export default {
         path: "/student",
         icon: "mdi-account-multiple",
         name: "Student"
+      },
+      {
+        path: "/subject",
+        icon: "mdi-alpha-d-box-outline",
+        name: "Subject"
+      },
+      {
+        path: "/test",
+        icon: "mdi-clipboard-alert-outline",
+        name: "Test"
       }
     ]
   }),
+
+  
 
   methods: {
     checkLoginPage() {

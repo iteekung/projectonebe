@@ -7,7 +7,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Student</v-toolbar-title>
+        <v-toolbar-title>Subject</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -28,25 +28,16 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.student_idname" label="รหัสนักศึกษา"></v-text-field>
+                    <v-text-field v-model="editedItem.sub_id" label="รหัสวิชา"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.student_firstname" label="ชื่อ"></v-text-field>
+                    <v-text-field v-model="editedItem.sub_eng" label="ชื่อวิชา (อังกฤษ)"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.student_lastname" label="นามสกุล"></v-text-field>
+                    <v-text-field v-model="editedItem.sub_thai" label="ชื่อวิชา (ไทย)"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.major" label="สาขา"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.tel" label="เบอร์โทร"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.email" label="อีเมลล์"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.status" label="สถานะ"></v-text-field>
+                    <v-text-field v-model="editedItem.sub_credit" label="หน่วยกิต"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -91,17 +82,14 @@ export default {
       dialog: false,
       headers: [
         {
-          text: 'รหัสนักศึกษา',
+          text: 'รหัสวิชา',
           align: 'start',
           sortable: false,
-          value: 'student_idname',
+          value: 'sub_id',
         },
-        { text: 'ชื่อ', value: 'student_firstname' },
-        { text: 'นามสกุล', value: 'student_lastname' },
-        { text: 'วิชา', value: 'major' },
-        { text: 'เบอร์โทร', value: 'tel' },
-        { text: 'อีเมลล์', value: 'email' },
-        { text: 'สถานะ', value: 'status' },
+        { text: 'ชื่อวิชา (อังกฤษ)', value: 'sub_eng' },
+        { text: 'ชื่อวิชา (ไทย)', value: 'sub_thai' },
+        { text: 'หน่วยกิต', value: 'sub_credit' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       dataItems: [],
@@ -109,13 +97,10 @@ export default {
       editedItem: {
       },
       defaultItem: {
-        student_idname: '',
-        student_firstname: '',
-        student_lastname: '',
-        major: '',
-        tel: '',
-        email: '',
-        status: ''
+        sub_id: '',
+        sub_eng: '',
+        sub_thai: '',
+        sub_credit: '',
       },
     }),
 
@@ -142,7 +127,7 @@ export default {
       },
 
       async fetchDatas() {
-        await Axios.get(this.$mainUrl + "student")
+        await Axios.get(this.$mainUrl + "subject")
           .then((res) => { this.dataItems = res.data })
           .catch(err => alert(err));
       },
@@ -157,7 +142,7 @@ export default {
         const index = this.dataItems.indexOf(item)
         var sure = confirm('Are you sure you want to delete this item?')
         if (sure) {
-          await Axios.delete(this.$mainUrl + "students/" + this.dataItems[index].id)
+          await Axios.delete(this.$mainUrl + "subjects/" + this.dataItems[index].id)
             .then(() => {
               this.dataItems.splice(index, 1)
             })
@@ -175,13 +160,13 @@ export default {
 
       async save () {
         if (this.editedIndex > -1) {
-          await Axios.put(this.$mainUrl + "students/" + this.dataItems[this.editedIndex].id, this.editedItem)
+          await Axios.put(this.$mainUrl + "subjects/" + this.dataItems[this.editedIndex].id, this.editedItem)
             .then(() => {
               Object.assign(this.dataItems[this.editedIndex], this.editedItem)
             })
             .catch(err => alert(err));
         } else {
-          await Axios.post(this.$mainUrl + "student", this.editedItem)
+          await Axios.post(this.$mainUrl + "subject", this.editedItem)
             .then(() => {
               this.dataItems.push(this.editedItem)
             })

@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import store from './store/auth'
 import Login from './components/Login.vue'
 import Room from './components/Room';
+import Subject from './components/Subject';
 import Student from './components/Student';
+import Test from './components/Test';
 
 
 Vue.use(Router)
@@ -25,6 +27,16 @@ let router = new Router({
         path: '/student',
         name: 'student',
         component: Student
+      },
+      {
+        path: '/subject',
+        name: 'subject',
+        component: Subject
+      },
+      {
+        path: '/test',
+        name: 'test',
+        component: Test
       }
     ]
   })
