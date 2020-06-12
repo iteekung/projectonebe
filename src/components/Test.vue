@@ -152,6 +152,8 @@ export default {
       },
 
       async fetchDatas() {
+        setTimeout(function (){
+        }, 500); 
         await Axios.get(this.$mainUrl + "test")
           .then((res) => { this.dataItems = res.data })
           .catch(err => alert(err));

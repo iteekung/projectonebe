@@ -1,5 +1,15 @@
 <template>
   <v-app id="inspire">
+    <v-row justify="center" align="center">
+      <v-progress-linear
+        :active="isLoading"
+        :fixed="true"
+        :height="5"
+        :indeterminate="true"
+        color="yellow darken-2"
+        style="z-index:9999"
+      ></v-progress-linear>
+    </v-row>
     <v-app v-if="!isLoginPage">
       <v-navigation-drawer v-model="drawer" app clipped>
         <v-list dense>
@@ -71,11 +81,12 @@ export default {
   },
 
   watch: {
-    $route: "checkLoginPage"
+    $route: "checkLoginPage",
   },
 
   data: () => ({
     isLoginPage: false,
+    isLoading: false,
     drawer: null,
     menus: [
       {
@@ -106,8 +117,6 @@ export default {
     ]
   }),
 
-  
-
   methods: {
     checkLoginPage() {
       this.isLoginPage =
@@ -116,7 +125,8 @@ export default {
     logout() {
       this.$router.push("login");
       localStorage.removeItem("token");
-    }
+    },
   }
+  
 };
 </script>

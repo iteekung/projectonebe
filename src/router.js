@@ -6,13 +6,15 @@ import Room from './components/Room';
 import Subject from './components/Subject';
 import Student from './components/Student';
 import Test from './components/Test';
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css';
 
 
 Vue.use(Router)
 
 let router = new Router({
     mode: 'history',
-    base: '/bebie/',
+    // base: '/bebie/',
     routes: [
       {
         path: '/login',
@@ -59,12 +61,21 @@ let router = new Router({
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = store.state.user;
     // console.log("login:" + loggedIn)
+    if (to.name) {
+      // Start the route progress bar.
+      Nprogress.start()
+  }
 
     if (authRequired && !loggedIn) {
         return next('/login');
     }
 
     next();
+  })
+
+  router.afterEach(() => {
+    // Complete the animation of the route progress bar.
+    Nprogress.done()
   })
 
 export default router
