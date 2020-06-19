@@ -4,6 +4,7 @@
     :items="dataItems"
     sort-by="room"
     class="elevation-1"
+    @click:row="ClickRow"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -149,6 +150,12 @@ export default {
 
       getKeyByValue(object, value) {
         return Object.keys(object).find(key => object[key] === value);
+      },
+
+      ClickRow(row) {
+        var test_id = row.id
+        console.log("id test : " + test_id);
+        this.$router.push('/teststudent?test_id='+ test_id);
       },
 
       async fetchDatas() {
